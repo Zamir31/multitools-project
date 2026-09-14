@@ -3,39 +3,52 @@ package com.bankcore;
 import java.math.BigDecimal;
 
 public class Cuenta {
-    private String titular = "Juan Perez";
-    private String numeroCuenta = "1234567890";
+    private int id;
+    private String numeroCuenta;
     private BigDecimal saldo = new BigDecimal("1000.0");
     private BigDecimal limiteCredito = new BigDecimal("1000.0");
     private BigDecimal saldoBloqueado = new BigDecimal("0.0");
     private BigDecimal saldoPendiente = new BigDecimal("0.0");
     private boolean isBlocked = false;
 
-    public Cuenta(String titular, BigDecimal saldo) {
-        this.titular = titular;
+    private Cliente cliente;
+
+    public Cuenta(int id, String numeroCuenta, BigDecimal saldo) {
+        this.id = id;
+        this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
     }
 
-    public String getTitular() {
-        return titular;
+    public int getId() {
+        return id;
     }
+
     public String getNumeroCuenta() {
         return numeroCuenta;
     }
+
     public BigDecimal getSaldo() {
         return saldo;
     }
+
     public BigDecimal getLimiteCredito() {
         return limiteCredito;
     }
+
     public BigDecimal getSaldoBloqueado() {
         return saldoBloqueado;
     }
+
     public BigDecimal getSaldoPendiente() {
         return saldoPendiente;
     }
+
     public boolean isBlocked() {
         return isBlocked;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
     }
 
     public void depositar(BigDecimal cantidad) {
@@ -66,5 +79,13 @@ public class Cuenta {
         } else {
             System.out.println("La cantidad a retirar debe ser mayor a 0");
         }
+    }
+
+    void asignarCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    void desasignarCliente() {
+        this.cliente = null;
     }
 }

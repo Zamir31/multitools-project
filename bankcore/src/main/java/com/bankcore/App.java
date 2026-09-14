@@ -9,10 +9,13 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Bank Core listo para usar");
 
-        Cuenta cuenta = new Cuenta("Daniel Noriega", new BigDecimal("1000.00"));
-        cuenta.depositar(new BigDecimal("100.00"));
-        System.out.println("Titular: " + cuenta.getTitular());
+        Cliente cliente = new Cliente(1, "Daniel", "Noriega", "daniel@noriega.com", "1234567890");
+        Cuenta cuenta = new Cuenta(1, "1234567890", new BigDecimal("1000.00"));
+        cliente.addCuenta(cuenta);
+        System.out.println("Cliente: " + cuenta.getCliente().getCompleteName());
         System.out.println("Numero de cuenta: " + cuenta.getNumeroCuenta());
+        System.out.println("Saldo: " + cuenta.getSaldo());
+        cuenta.depositar(new BigDecimal("100.00"));
         System.out.println("Saldo: " + cuenta.getSaldo());
         cuenta.retirar(new BigDecimal("100.00"));
         System.out.println("Saldo: " + cuenta.getSaldo());
