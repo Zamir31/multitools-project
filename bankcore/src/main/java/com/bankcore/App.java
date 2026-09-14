@@ -10,14 +10,16 @@ public class App {
         System.out.println("Bank Core listo para usar");
 
         Cliente cliente = new Cliente(1, "Daniel", "Noriega", "daniel@noriega.com", "1234567890");
-        Cuenta cuenta = new Cuenta(1, "1234567890", new BigDecimal("1000.00"));
-        cliente.addCuenta(cuenta);
-        System.out.println("Cliente: " + cuenta.getCliente().getCompleteName());
-        System.out.println("Numero de cuenta: " + cuenta.getNumeroCuenta());
-        System.out.println("Saldo: " + cuenta.getSaldo());
-        cuenta.depositar(new BigDecimal("100.00"));
-        System.out.println("Saldo: " + cuenta.getSaldo());
-        cuenta.retirar(new BigDecimal("100.00"));
-        System.out.println("Saldo: " + cuenta.getSaldo());
+
+        CuentaCorriente cuentaCorriente = new CuentaCorriente(1, "1234567890", new BigDecimal("1000.00"));
+        cliente.addCuenta(cuentaCorriente);
+
+        CuentaAhorro cuentaAhorro = new CuentaAhorro(2, "1234567891", new BigDecimal("1000.00"));
+        cliente.addCuenta(cuentaAhorro);
+
+        System.out.println("Saldo cuenta corriente: " + cuentaCorriente.getSaldo());
+        cuentaCorriente.bloquearCuenta();
+
+        cuentaCorriente.depositar(new BigDecimal("100.00"));
     }
 }

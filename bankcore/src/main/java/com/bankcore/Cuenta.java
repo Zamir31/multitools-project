@@ -2,7 +2,7 @@ package com.bankcore;
 
 import java.math.BigDecimal;
 
-public class Cuenta {
+public abstract class Cuenta {
     private int id;
     private String numeroCuenta;
     private BigDecimal saldo = new BigDecimal("1000.0");
@@ -87,5 +87,13 @@ public class Cuenta {
 
     void desasignarCliente() {
         this.cliente = null;
+    }
+
+    public void bloquearCuenta() {
+        this.isBlocked = true;
+    }
+
+    public void desbloquearCuenta() {
+        this.isBlocked = false;
     }
 }
