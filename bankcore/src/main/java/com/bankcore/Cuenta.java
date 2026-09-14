@@ -1,17 +1,18 @@
 package com.bankcore;
 
+import java.math.BigDecimal;
+
 public class Cuenta {
     private String titular = "Juan Perez";
     private String numeroCuenta = "1234567890";
-    private double saldo = 1000.0;
-    private double limiteCredito = 1000.0;
-    private double saldoBloqueado = 0.0;
-    private double saldoPendiente = 0.0;
+    private BigDecimal saldo = new BigDecimal("1000.0");
+    private BigDecimal limiteCredito = new BigDecimal("1000.0");
+    private BigDecimal saldoBloqueado = new BigDecimal("0.0");
+    private BigDecimal saldoPendiente = new BigDecimal("0.0");
     private boolean isBlocked = false;
 
-    public Cuenta(String titular, String numeroCuenta, double saldo) {
+    public Cuenta(String titular, BigDecimal saldo) {
         this.titular = titular;
-        this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
     }
 
@@ -21,49 +22,46 @@ public class Cuenta {
     public String getNumeroCuenta() {
         return numeroCuenta;
     }
-    public double getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
-    public double getLimiteCredito() {
+    public BigDecimal getLimiteCredito() {
         return limiteCredito;
     }
-    public double getSaldoDisponible() {
-        return saldo - limiteCredito;
-    }
-    public double getSaldoBloqueado() {
+    public BigDecimal getSaldoBloqueado() {
         return saldoBloqueado;
     }
-    public double getSaldoPendiente() {
+    public BigDecimal getSaldoPendiente() {
         return saldoPendiente;
     }
     public boolean isBlocked() {
         return isBlocked;
     }
 
-    public void depositar(double cantidad) {
+    public void depositar(BigDecimal cantidad) {
         if (isBlocked) {
             System.out.println("La cuenta está bloqueada");
             return;
         }
-        if (cantidad > 0) {
-            saldo += cantidad;
+        if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
+            saldo = saldo.add(cantidad);
             System.out.println("Deposito realizado correctamente");
         } else {
             System.out.println("La cantidad a depositar debe ser mayor a 0");
         }
     }
 
-    public void retirar(double cantidad) {
+    public void retirar(BigDecimal cantidad) {
         if (isBlocked) {
             System.out.println("La cuenta está bloqueada");
             return;
         }
-        if (cantidad > getSaldoDisponible()) {
+        if (cantidad.compareTo(getSaldo()) > 0) {
             System.out.println("La cantidad a retirar es mayor al saldo disponible");
             return;
         }
-        if (cantidad > 0) {
-            saldo -= cantidad;
+        if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
+            saldo = saldo.subtract(cantidad);
             System.out.println("Retiro realizado correctamente");
         } else {
             System.out.println("La cantidad a retirar debe ser mayor a 0");
