@@ -58,31 +58,38 @@ public abstract class Cuenta {
         return List.copyOf(historial);
     }
 
-    public void depositar(BigDecimal cantidad) {
+    private void acreditar(BigDecimal cantidad) {
+        if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new CuentaException("La cantidad a acreditar debe ser mayor a 0");
+        }
         if (isBlocked) {
             throw new CuentaException("La cuenta está bloqueada");
         }
-        if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
-            saldo = saldo.add(cantidad);
-            System.out.println("Deposito realizado correctamente");
-        } else {
-            throw new CuentaException("La cantidad a depositar debe ser mayor a 0");
-        }
+        saldo = saldo.add(cantidad);
     }
 
-    public void retirar(BigDecimal cantidad) {
-        if (isBlocked) {
-            throw new CuentaException("La cuenta está bloqueada");
-        }
+    protected void debitar(BigDecimal cantidad) {
+
         if (cantidad.compareTo(getSaldo()) > 0) {
             throw new CuentaException("La cantidad a retirar es mayor al saldo de la cuenta");
         }
-        if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
-            saldo = saldo.subtract(cantidad);
-            System.out.println("Retiro realizado correctamente");
-        } else {
-            throw new CuentaException("La cantidad a retirar debe ser mayor a 0");
+        if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new CuentaException("La cantidad a debitar debe ser mayor a 0");
         }
+        if (isBlocked) {
+            throw new CuentaException("La cuenta está bloqueada");
+        }
+        saldo = saldo.subtract(cantidad);
+    }
+
+    public void depositar(BigDecimal cantidad) {
+        acreditar(cantidad);
+        agregarTransaccion(new Transaccion(TipoTransaccion.DEPOSITO, cantidad, LocalDateTime.now(), "Deposito de " + cantidad, this.getNumeroCuenta(), null));
+    }
+
+    public void retirar(BigDecimal cantidad) {
+        debitar(cantidad);
+        agregarTransaccion(new Transaccion(TipoTransaccion.RETIRO, cantidad, LocalDateTime.now(), "Retiro de " + cantidad, this.getNumeroCuenta(), null));
     }
 
     public void transferir(Cuenta cuentaDestino, BigDecimal cantidad) {
@@ -91,15 +98,16 @@ public abstract class Cuenta {
         }
         if (cuentaDestino.isBlocked()) {
             throw new CuentaException("La cuenta destino está bloqueada");
-        }        
+        }
         if (cuentaDestino.equals(this)) {
             throw new CuentaException("La cuenta destino no puede ser la misma cuenta");
         }
-        this.retirar(cantidad);
-        cuentaDestino.depositar(cantidad);
+        debitar(cantidad);
         agregarTransaccion(new Transaccion(TipoTransaccion.TRANSFERENCIA_ENVIADA, cantidad, LocalDateTime.now(), "Transferencia a " + cuentaDestino.getNumeroCuenta(), this.getNumeroCuenta(), cuentaDestino.getNumeroCuenta()));
+        cuentaDestino.acreditar(cantidad);
+        cuentaDestino.agregarTransaccion(new Transaccion(TipoTransaccion.TRANSFERENCIA_RECIBIDA, cantidad, LocalDateTime.now(), "Transferencia de " + this.getNumeroCuenta(), this.getNumeroCuenta(), cuentaDestino.getNumeroCuenta()));
     }
-    
+
     void asignarCliente(Cliente cliente) {
         this.cliente = cliente;
     }
@@ -121,4 +129,3 @@ public abstract class Cuenta {
         System.out.println("Transaccion agregada correctamente");
     }
 }
-

@@ -8,11 +8,11 @@ public class CuentaAhorro extends Cuenta {
         super(id, numeroCuenta, saldo);
     }
 
-    @Override
-    public void retirar(BigDecimal cantidad) {
+    @Override 
+    protected void debitar(BigDecimal cantidad) {
         if(cantidad.compareTo(new BigDecimal("100")) > 0) {
             throw new CuentaException("La cantidad a retirar es mayor a 100");
         }
-        super.retirar(cantidad);
+        super.debitar(cantidad);
     }
 }
