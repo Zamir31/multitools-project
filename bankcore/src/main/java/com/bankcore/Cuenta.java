@@ -53,46 +53,40 @@ public abstract class Cuenta {
 
     public void depositar(BigDecimal cantidad) {
         if (isBlocked) {
-            System.out.println("La cuenta está bloqueada");
-            return;
+            throw new CuentaException("La cuenta está bloqueada");
         }
         if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
             saldo = saldo.add(cantidad);
             System.out.println("Deposito realizado correctamente");
         } else {
-            System.out.println("La cantidad a depositar debe ser mayor a 0");
+            throw new CuentaException("La cantidad a depositar debe ser mayor a 0");
         }
     }
 
     public void retirar(BigDecimal cantidad) {
         if (isBlocked) {
-            System.out.println("La cuenta está bloqueada");
-            return;
+            throw new CuentaException("La cuenta está bloqueada");
         }
         if (cantidad.compareTo(getSaldo()) > 0) {
-            System.out.println("La cantidad a retirar es mayor al saldo disponible");
-            return;
+            throw new CuentaException("La cantidad a retirar es mayor al saldo disponible");
         }
         if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
             saldo = saldo.subtract(cantidad);
             System.out.println("Retiro realizado correctamente");
         } else {
-            System.out.println("La cantidad a retirar debe ser mayor a 0");
+            throw new CuentaException("La cantidad a retirar debe ser mayor a 0");
         }
     }
 
     public void transferir(Cuenta cuentaDestino, BigDecimal cantidad) {
         if (cuentaDestino == null) {
-            System.out.println("La cuenta destino no puede ser null");
-            return;
+            throw new CuentaException("La cuenta destino no puede ser null");
         }
         if (cuentaDestino.isBlocked()) {
-            System.out.println("La cuenta destino está bloqueada");
-            return;
+            throw new CuentaException("La cuenta destino está bloqueada");
         }        
         if (cuentaDestino.equals(this)) {
-            System.out.println("La cuenta destino no puede ser la misma cuenta");
-            return;
+            throw new CuentaException("La cuenta destino no puede ser la misma cuenta");
         }
         this.retirar(cantidad);
         cuentaDestino.depositar(cantidad);

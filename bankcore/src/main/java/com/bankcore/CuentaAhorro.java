@@ -11,10 +11,8 @@ public class CuentaAhorro extends Cuenta {
     @Override
     public void retirar(BigDecimal cantidad) {
         if(cantidad.compareTo(new BigDecimal("100")) > 0) {
-            System.out.println("La cantidad a retirar es mayor a 100");
-            return;
-        } else {
-            super.retirar(cantidad);
+            throw new CuentaException("La cantidad a retirar es mayor a 100");
         }
+        super.retirar(cantidad);
     }
 }

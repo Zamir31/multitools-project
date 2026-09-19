@@ -17,9 +17,10 @@ public class App {
         CuentaAhorro cuentaAhorro = new CuentaAhorro(2, "1234567891", new BigDecimal("1000.00"));
         cliente.addCuenta(cuentaAhorro);
 
-        System.out.println("Saldo cuenta corriente: " + cuentaCorriente.getSaldo());
-        cuentaCorriente.bloquearCuenta();
-
-        cuentaCorriente.depositar(new BigDecimal("100.00"));
+        try {
+            cuentaAhorro.transferir(cuentaCorriente, new BigDecimal("1500.00"));
+        } catch (CuentaException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
