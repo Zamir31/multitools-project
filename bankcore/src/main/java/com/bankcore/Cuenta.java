@@ -1,6 +1,9 @@
 package com.bankcore;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Cuenta {
     private int id;
@@ -10,7 +13,7 @@ public abstract class Cuenta {
     private BigDecimal saldoBloqueado = new BigDecimal("0.0");
     private BigDecimal saldoPendiente = new BigDecimal("0.0");
     private boolean isBlocked = false;
-
+    private final List<Transaccion> historial = new ArrayList<>();
     private Cliente cliente;
 
     public Cuenta(int id, String numeroCuenta, BigDecimal saldo) {
@@ -51,6 +54,10 @@ public abstract class Cuenta {
         return cliente;
     }
 
+    public List<Transaccion> getHistorial() {
+        return List.copyOf(historial);
+    }
+
     public void depositar(BigDecimal cantidad) {
         if (isBlocked) {
             throw new CuentaException("La cuenta está bloqueada");
@@ -68,7 +75,7 @@ public abstract class Cuenta {
             throw new CuentaException("La cuenta está bloqueada");
         }
         if (cantidad.compareTo(getSaldo()) > 0) {
-            throw new CuentaException("La cantidad a retirar es mayor al saldo disponible");
+            throw new CuentaException("La cantidad a retirar es mayor al saldo de la cuenta");
         }
         if (cantidad.compareTo(BigDecimal.ZERO) > 0) {
             saldo = saldo.subtract(cantidad);
@@ -90,7 +97,7 @@ public abstract class Cuenta {
         }
         this.retirar(cantidad);
         cuentaDestino.depositar(cantidad);
-        System.out.println("Transferencia realizada correctamente");
+        agregarTransaccion(new Transaccion(TipoTransaccion.TRANSFERENCIA_ENVIADA, cantidad, LocalDateTime.now(), "Transferencia a " + cuentaDestino.getNumeroCuenta(), this.getNumeroCuenta(), cuentaDestino.getNumeroCuenta()));
     }
     
     void asignarCliente(Cliente cliente) {
@@ -107,6 +114,11 @@ public abstract class Cuenta {
 
     public void desbloquearCuenta() {
         this.isBlocked = false;
+    }
+
+    private void agregarTransaccion(Transaccion transaccion) {
+        historial.add(transaccion);
+        System.out.println("Transaccion agregada correctamente");
     }
 }
 
