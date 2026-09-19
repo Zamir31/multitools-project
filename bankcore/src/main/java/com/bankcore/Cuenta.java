@@ -81,6 +81,24 @@ public abstract class Cuenta {
         }
     }
 
+    public void transferir(Cuenta cuentaDestino, BigDecimal cantidad) {
+        if (cuentaDestino == null) {
+            System.out.println("La cuenta destino no puede ser null");
+            return;
+        }
+        if (cuentaDestino.isBlocked()) {
+            System.out.println("La cuenta destino está bloqueada");
+            return;
+        }        
+        if (cuentaDestino.equals(this)) {
+            System.out.println("La cuenta destino no puede ser la misma cuenta");
+            return;
+        }
+        this.retirar(cantidad);
+        cuentaDestino.depositar(cantidad);
+        System.out.println("Transferencia realizada correctamente");
+    }
+    
     void asignarCliente(Cliente cliente) {
         this.cliente = cliente;
     }
@@ -97,3 +115,4 @@ public abstract class Cuenta {
         this.isBlocked = false;
     }
 }
+
