@@ -1,4 +1,4 @@
-package com.bankcore;
+package com.bankcore.domain;
 
 public enum TipoTransaccion {
     DEPOSITO,

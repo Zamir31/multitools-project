@@ -1,4 +1,4 @@
-package com.bankcore;
+package com.bankcore.domain;
 
 import java.util.ArrayList;
 import java.util.List;

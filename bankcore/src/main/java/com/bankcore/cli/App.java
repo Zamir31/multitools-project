@@ -1,6 +1,11 @@
-package com.bankcore;
+package com.bankcore.cli;
 
 import java.math.BigDecimal;
+
+import com.bankcore.domain.Cliente;
+import com.bankcore.domain.CuentaAhorro;
+import com.bankcore.domain.CuentaCorriente;
+import com.bankcore.domain.CuentaException;
 
 /**
  * Hello world!

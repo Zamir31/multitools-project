@@ -1,3 +1,8 @@
 /media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/App.java
-/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/Cliente.java
-/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/Cuenta.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/Cliente.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/Cuenta.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/CuentaAhorro.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/CuentaCorriente.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/CuentaException.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/TipoTransaccion.java
+/media/daniel-noriega/diskStorageUbunt/documentos/personal/multitools-project/bankcore/src/main/java/com/bankcore/domain/Transaccion.java

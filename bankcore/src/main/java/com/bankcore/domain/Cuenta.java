@@ -1,4 +1,4 @@
-package com.bankcore;
+package com.bankcore.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
