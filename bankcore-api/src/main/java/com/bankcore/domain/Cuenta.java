@@ -5,24 +5,63 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
+@Table(name = "cuentas")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_cuenta")
 public abstract class Cuenta {
-    private int id;
+
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 255, unique = true)
     private String numeroCuenta;
+
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal saldo = new BigDecimal("1000.0");
+
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal limiteCredito = new BigDecimal("1000.0");
+
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal saldoBloqueado = new BigDecimal("0.0");
+
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal saldoPendiente = new BigDecimal("0.0");
-    private boolean isBlocked = false;
-    private final List<Transaccion> historial = new ArrayList<>();
+
+    @Column(nullable = false)
+    private boolean blocked = false;
+
+    @ElementCollection
+    @CollectionTable(name = "historial_transacciones", joinColumns = @JoinColumn(name = "cuenta_id"))
+    private List<Transaccion> historial = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    public Cuenta(int id, String numeroCuenta, BigDecimal saldo) {
-        this.id = id;
+    protected Cuenta(String numeroCuenta, BigDecimal saldo) {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
     }
+    protected Cuenta() {}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -47,7 +86,7 @@ public abstract class Cuenta {
     }
 
     public boolean isBlocked() {
-        return isBlocked;
+        return blocked;
     }
 
     public Cliente getCliente() {
@@ -62,7 +101,7 @@ public abstract class Cuenta {
         if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
             throw new CuentaException("La cantidad a acreditar debe ser mayor a 0");
         }
-        if (isBlocked) {
+        if (blocked) {
             throw new CuentaException("La cuenta está bloqueada");
         }
         saldo = saldo.add(cantidad);
@@ -76,7 +115,7 @@ public abstract class Cuenta {
         if (cantidad.compareTo(BigDecimal.ZERO) <= 0) {
             throw new CuentaException("La cantidad a debitar debe ser mayor a 0");
         }
-        if (isBlocked) {
+        if (blocked) {
             throw new CuentaException("La cuenta está bloqueada");
         }
         saldo = saldo.subtract(cantidad);
@@ -117,11 +156,11 @@ public abstract class Cuenta {
     }
 
     public void bloquearCuenta() {
-        this.isBlocked = true;
+        this.blocked = true;
     }
 
     public void desbloquearCuenta() {
-        this.isBlocked = false;
+        this.blocked = false;
     }
 
     private void agregarTransaccion(Transaccion transaccion) {
