@@ -2,13 +2,16 @@ package com.bankcore.cli;
 
 import java.math.BigDecimal;
 
+import com.bankcore.application.TransferirDinero;
 import com.bankcore.domain.Cliente;
 import com.bankcore.domain.CuentaAhorro;
 import com.bankcore.domain.CuentaCorriente;
 import com.bankcore.domain.CuentaException;
+import com.bankcore.repository.CuentaRepository;
+import com.bankcore.repository.memory.InMemoryCuentaRepository;
 
 /**
- * Hello world!
+ * CLI: crea datos de demo, cablea dependencias e imprime resultados.
  */
 public class App {
     public static void main(String[] args) {
@@ -22,10 +25,19 @@ public class App {
         CuentaCorriente cuentaCorriente = new CuentaCorriente(2, "1234567891", new BigDecimal("1000.00"));
         cliente.addCuenta(cuentaCorriente);
 
+        CuentaRepository cuentaRepository = new InMemoryCuentaRepository();
+        cuentaRepository.guardar(cuentaAhorro);
+        cuentaRepository.guardar(cuentaCorriente);
+
+        TransferirDinero transferirDinero = new TransferirDinero(cuentaRepository);
+
         try {
-            cuentaCorriente.transferir(cuentaAhorro, new BigDecimal("1500.00"));
+            transferirDinero.ejecutar("1234567891", "1234567890", new BigDecimal("100.00"));
             System.out.println("Transferencia realizada correctamente");
-            System.out.println("Historial de transacciones: " + cuentaCorriente.getHistorial());
+            System.out.println("Saldo corriente: " + cuentaCorriente.getSaldo());
+            System.out.println("Saldo ahorro: " + cuentaAhorro.getSaldo());
+            System.out.println("Historial corriente: " + cuentaCorriente.getHistorial());
+            System.out.println("Historial ahorro: " + cuentaAhorro.getHistorial());
         } catch (CuentaException e) {
             System.out.println(e.getMessage());
         } finally {
