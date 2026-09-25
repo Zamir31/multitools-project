@@ -2,11 +2,18 @@ package com.bankcore.domain;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
+
+@Entity
+@DiscriminatorValue("AHORRO")
 public class CuentaAhorro extends Cuenta {
 
-    public CuentaAhorro(int id, String numeroCuenta, BigDecimal saldo) {
-        super(id, numeroCuenta, saldo);
+    public CuentaAhorro(String numeroCuenta, BigDecimal saldo) {
+        super(numeroCuenta, saldo);
     }
+
+    protected CuentaAhorro() {}
 
     @Override 
     protected void debitar(BigDecimal cantidad) {

@@ -20,13 +20,13 @@ public class Transaccion {
     @Column(nullable = false)
     private LocalDateTime fecha;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String descripcion;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String numeroCuentaOrigen;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String numeroCuentaDestino;
 
     public Transaccion(TipoTransaccion tipoTransaccion, BigDecimal cantidad, LocalDateTime fecha, String descripcion, String numeroCuentaOrigen, String numeroCuentaDestino) {
@@ -39,5 +39,29 @@ public class Transaccion {
     }
 
     protected Transaccion() {}
+
+    public TipoTransaccion getTipoTransaccion() {
+        return tipoTransaccion;
+    }
+
+    public BigDecimal getCantidad() {
+        return cantidad;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getNumeroCuentaOrigen() {
+        return numeroCuentaOrigen;
+    }
+
+    public String getNumeroCuentaDestino() {
+        return numeroCuentaDestino;
+    }
 
 }

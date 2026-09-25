@@ -17,7 +17,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "cuentas")
@@ -47,12 +48,11 @@ public abstract class Cuenta {
     @Column(nullable = false)
     private boolean blocked = false;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "historial_transacciones", joinColumns = @JoinColumn(name = "cuenta_id"))
     private List<Transaccion> historial = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @Transient
     private Cliente cliente;
 
     protected Cuenta(String numeroCuenta, BigDecimal saldo) {
